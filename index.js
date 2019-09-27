@@ -1,5 +1,8 @@
 const request = require('request');
 const config = require('./config.json');
+const express = require('express');
+const app = express();
+const port = config.port;
 
 const sendFilteredCalendar = (req, expressRes) => {
   request(config.url, { json: false }, (err, res, body) => {
@@ -8,8 +11,8 @@ const sendFilteredCalendar = (req, expressRes) => {
     }
     let out = '';
     body.split('BEGIN:VEVENT').forEach((event, index) => {
-      if(index===0){
-        out+=event;
+      if (index === 0) {
+        out += event;
         return;
       }
       let toFilter = false;
@@ -29,10 +32,6 @@ const sendFilteredCalendar = (req, expressRes) => {
   });
 };
 
-const express = require('express');
-const app = express();
-const port = config.port;
-
 app.get('/', sendFilteredCalendar);
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Listening on http://127.0.0.1:${port}/`));
